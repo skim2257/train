@@ -319,7 +319,7 @@ const cw = W[curWeek];
 document.getElementById('now-title').textContent =
   started ? 'Week ' + cw[0] + ' — ' + PHASES[cw[11]].name : 'Week 2 starts Monday 7 September';
 document.getElementById('now-meta').textContent =
-  'Week of ' + cw[1] + (cw[10]==='dl' ? ' · deload week' : '') + ' · ' + cw[9] + ' km';
+  'Week of ' + cw[1] + (cw[10]==='deload' ? ' · deload week' : '') + ' · ' + cw[9] + ' km';
 document.getElementById('now-days').innerHTML = DOW.map((d,i) => {
   const s = cw[i+2];
   return '<li class="' + (i===todayCol?'is-today ':'') + (isRest(s)?'is-rest':'') + '">' +
@@ -330,7 +330,7 @@ document.getElementById('now-days').innerHTML = DOW.map((d,i) => {
 const maxKm = 52;
 document.getElementById('ribbon').innerHTML = W.map((w,i) => {
   const km = typeof w[9] === 'number' ? w[9] : (parseInt(w[9], 10) || maxKm);
-  const cls = w[10]==='race' ? 'race' : (w[10]==='dl' ? 'dl' : '');
+  const cls = w[10]==='race' ? 'race' : (w[10]==='deload' ? 'dl' : '');
   const cur = (started && i===curWeek) ? ' cur' : '';
   return '<button class="' + cls + cur + '" style="height:' + Math.round(km/maxKm*100) + '%" ' +
     'data-w="' + w[0] + '" title="Week ' + w[0] + ' · ' + w[9] + ' km" ' +
@@ -363,7 +363,7 @@ document.getElementById('ribbon').addEventListener('click', e => {
 const HEADS = ['Wk','Week of','Mon','Tue','Wed','Thu','Fri','Sat','Sun','km'];
 document.getElementById('phases').innerHTML = PHASES.map((p,pi) => {
   const rows = W.filter(w => w[11] === pi).map(w => {
-    const cls = ['row', w[10]==='dl'?'dl':'', w[10]==='race'?'race':'',
+    const cls = ['row', w[10]==='deload'?'dl':'', w[10]==='race'?'race':'',
                  (started && w[0]===W[curWeek][0])?'cur':''].filter(Boolean).join(' ');
     const cells = w.slice(0,10).map((c,ci) => {
       const key = ci===0 ? 'wk' : ci===1 ? 'wof' : ci===9 ? 'km' : '';
@@ -372,7 +372,7 @@ document.getElementById('phases').innerHTML = PHASES.map((p,pi) => {
       return '<div class="cell ' + key + extra + '"' + (label?' data-d="'+label+'"':'') + '>' + esc(c) + '</div>';
     }).join('');
     const line = '<div class="wkline"><b>Week ' + w[0] + '</b><em>' + esc(w[1]) +
-      (w[10]==='dl'?' · deload':'') + '</em><span class="tot">' + esc(w[9]) + ' km</span></div>';
+      (w[10]==='deload'?' · deload':'') + '</em><span class="tot">' + esc(w[9]) + ' km</span></div>';
     return '<div class="' + cls + '" id="w' + w[0] + '">' + line + cells + '</div>';
   }).join('');
   return '<section class="phase" id="p' + p.n + '">' +
